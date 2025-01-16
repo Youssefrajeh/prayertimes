@@ -24,12 +24,14 @@
         border-collapse: collapse;
         margin: 0 auto;
         background-color: #fff;
+        table-layout: fixed;
       }
       th,
       td {
         border: 1px solid #000;
         padding: 10px;
         text-align: left;
+        width: 50%;
       }
       th {
         background-color: rgba(0, 0, 0, 0.1);
@@ -135,6 +137,27 @@
         font-size: 1.5em;
         margin-bottom: 20px;
       }
+      @media (max-width: 600px) {
+        table {
+          display: table;
+          width: 100%;
+        }
+        th,
+        td {
+          display: table-cell;
+          width: 50%;
+          box-sizing: border-box;
+          padding: 10px;
+        }
+        th::before,
+        td::before {
+          content: none;
+        }
+        th,
+        td {
+          text-align: left;
+        }
+      }
     </style>
   </head>
   <body>
@@ -210,6 +233,8 @@
             const row = document.createElement("tr");
             const prayerCell = document.createElement("td");
             const timeCell = document.createElement("td");
+            prayerCell.setAttribute("data-label", "Prayer");
+            timeCell.setAttribute("data-label", "Time");
 
             prayerCell.textContent = prayer;
             timeCell.textContent = timings[prayer];
