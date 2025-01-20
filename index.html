@@ -167,7 +167,6 @@
       <option value="London,Canada">London, Canada</option>
       <option value="New York,USA">New York, USA</option>
       <option value="Mecca,Saudi Arabia">Mecca, Saudi Arabia</option>
-      <!-- Add more cities and countries as needed -->
     </select>
     <label>
       <input type="checkbox" id="use-current-location" />
@@ -366,7 +365,6 @@
                 setInterval(updateCountdown, 1000);
                 updateCountdown();
 
-                // Fetch city name using reverse geocoding
                 const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
                 fetch(geocodeUrl)
                   .then((response) => response.json())
@@ -408,13 +406,16 @@
       document
         .getElementById("use-current-location")
         .addEventListener("change", (event) => {
+          const citySelect = document.getElementById("city-select");
           if (event.target.checked) {
             getCurrentLocation();
+            citySelect.style.display = "none";
           } else {
-            const value = document.getElementById("city-select").value;
+            const value = citySelect.value;
             const [city, country] = value.split(",");
             fetchPrayerTimes(city, country);
             document.getElementById("current-location-name").textContent = "";
+            citySelect.style.display = "block";
           }
         });
 
@@ -424,7 +425,6 @@
           document.body.classList.toggle("dark-mode");
         });
 
-      // Initial fetch for default city
       fetchPrayerTimes("London", "Canada");
     </script>
   </body>
