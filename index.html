@@ -173,6 +173,7 @@
       <input type="checkbox" id="use-current-location" />
       Use Current Location
     </label>
+    <div id="current-location-name"></div>
     <table id="prayer-times">
       <thead>
         <tr>
@@ -364,6 +365,24 @@
                 }
                 setInterval(updateCountdown, 1000);
                 updateCountdown();
+
+                // Fetch city name using reverse geocoding
+                const geocodeUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+                fetch(geocodeUrl)
+                  .then((response) => response.json())
+                  .then((locationData) => {
+                    const city =
+                      locationData.address.city ||
+                      locationData.address.town ||
+                      locationData.address.village;
+                    const country = locationData.address.country;
+                    document.getElementById(
+                      "current-location-name"
+                    ).textContent = `Current Location: ${city}, ${country}`;
+                  })
+                  .catch((error) =>
+                    console.error("Error fetching location name:", error)
+                  );
               })
               .catch((error) =>
                 console.error("Error fetching prayer times:", error)
@@ -382,6 +401,7 @@
           const value = document.getElementById("city-select").value;
           const [city, country] = value.split(",");
           fetchPrayerTimes(city, country);
+          document.getElementById("current-location-name").textContent = "";
         }
       });
 
@@ -394,6 +414,7 @@
             const value = document.getElementById("city-select").value;
             const [city, country] = value.split(",");
             fetchPrayerTimes(city, country);
+            document.getElementById("current-location-name").textContent = "";
           }
         });
 
